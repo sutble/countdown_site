@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Looping Background Video with Centered Text</title>
+    <title>Countdown to December 11th, 2024</title>
     <style>
+
+
+        @font-face {
+            font-family: 'PrintChar21';
+            src: url('PrintChar21.ttf') format('truetype');
+        }
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             overflow: hidden;
-            font-family: 'Fira Code', monospace;
+            font-family: 'PrintChar21', monospace;
         }
         #video-container {
             position: fixed;
@@ -35,14 +39,15 @@
         }
         .centered-text {
             position: absolute;
-            top: 50%;
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
-            font-size: 2em;
+            color: rgb(219, 209, 209);
+            font-size: 36px;
             text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
             z-index: 1;
+            padding: 20px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -54,28 +59,69 @@
         </video>
     </div>
 
-    <div id="countdown" class="centered-text">
-        Your Text Here bro
-    </div>
+    <div id="countdown" class="centered-text"></div>
 
     <script>
+        function createNoise() {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'noise-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '1';
+            canvas.style.opacity = '0.01';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            function updateNoise() {
+                const grainSize = 10; // Increase this value for larger grains
+                const w = canvas.width / grainSize;
+                const h = canvas.height / grainSize;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let x = 0; x < w; x++) {
+                    for (let y = 0; y < h; y++) {
+                        const value = Math.random() * 255;
+                        ctx.fillStyle = `rgb(${value}, ${value}, ${value})`;
+                        ctx.fillRect(x * grainSize, y * grainSize, grainSize, grainSize);
+                    }
+                }
+
+                requestAnimationFrame(updateNoise);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            updateNoise();
+        }
+           
         document.addEventListener('DOMContentLoaded', function() {
             var video = document.getElementById('background-video');
             video.play();
+
+            function updateCountdown() {
+                var now = new Date();
+                var targetDate = new Date('2024-12-11T00:00:00');
+                var timeDifference = targetDate - now;
+                var daysRemaining = timeDifference / (1000 * 60 * 60 * 24);
+                
+                document.getElementById('countdown').innerHTML = 
+                    daysRemaining.toFixed(8) + '  Days';
+            }
+            createNoise();
+            updateCountdown();
+            setInterval(updateCountdown, 10); // Update every 10 milliseconds
         });
-
-        function updateCountdown() {
-            const targetDate = new Date('2024-12-11T00:00:00Z');
-            const now = new Date();
-            const timeDifference = targetDate - now;
-            
-            const days = timeDifference / (1000 * 60 * 60 * 24);
-            
-            document.getElementById('countdown').textContent = days.toFixed(8) + ' days';
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 10); // Update every 10 milliseconds
     </script>
 </body>
 </html>
