@@ -6,7 +6,22 @@
     <title>Countdown to December 11th, 2024</title>
     <style>
 
+        .number-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
 
+        .large-number {
+            font-size: 72px;
+            font-weight: bold;
+        }
+
+        .small-number {
+            font-size: 24px;
+            vertical-align: super;
+        }
+        
         @font-face {
             font-family: 'PrintChar21';
             src: url('PrintChar21.ttf') format('truetype');
@@ -39,10 +54,10 @@
         }
         .centered-text {
             position: absolute;
-            top: 30%;
+            top: 35%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: rgb(219, 209, 209);
+            color: rgb(255, 255, 255);
             font-size: 36px;
             text-align: center;
             z-index: 1;
@@ -114,9 +129,15 @@
                 var targetDate = new Date('2024-12-11T00:00:00');
                 var timeDifference = targetDate - now;
                 var daysRemaining = timeDifference / (1000 * 60 * 60 * 24);
+                var integerPart = Math.floor(daysRemaining);
+                var decimalPart = (daysRemaining - integerPart).toFixed(8).substr(1);
                 
                 document.getElementById('countdown').innerHTML = 
-                    daysRemaining.toFixed(8) + '  Days';
+                '<div class="number-container">' +
+                `<span class="large-number">${integerPart}</span>` +
+                `<span class="small-number">${decimalPart}</span> </br>` +
+                '</div>' +
+                'Days';
             }
             createNoise();
             updateCountdown();
