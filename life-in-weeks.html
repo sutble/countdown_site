@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life in Weeks — Adi Garg</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #f0f6fc;
+    }
+    
+    .subtitle {
+      color: #8b949e;
+      margin-bottom: 2rem;
+    }
+    
+    /* Quarter Countdown */
+    .countdown {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .countdown-label {
+      font-size: 0.875rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .countdown-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #58a6ff;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .countdown-unit {
+      font-size: 1rem;
+      color: #8b949e;
+      margin-left: 0.25rem;
+    }
+    
+    .countdown-section {
+      text-align: center;
+    }
+    
+    .countdown-end {
+      color: #8b949e;
+      font-size: 0.875rem;
+    }
+    
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    
+    .legend-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+    }
+    
+    /* Week Grid */
+    .weeks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .year-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .year-label {
+      width: 50px;
+      font-size: 0.75rem;
+      color: #8b949e;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    
+    .weeks-row {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+    }
+    
+    .week {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+    }
+    
+    .week:hover {
+      transform: scale(1.4);
+      z-index: 10;
+      box-shadow: 0 0 8px rgba(255,255,255,0.3);
+    }
+    
+    /* Score colors */
+    .week.score-5 { background: #39d353; } /* Peak - bright green */
+    .week.score-4 { background: #26a641; } /* Solid - green */
+    .week.score-3 { background: #006d32; } /* Mixed - dark green */
+    .week.score-2 { background: #f97316; } /* Rough - orange */
+    .week.score-1 { background: #da3633; } /* Hard - red */
+    .week.score-null { background: #21262d; border: 1px solid #30363d; } /* No data - dark */
+    .week.future { background: #1d4ed8; opacity: 0.6; } /* Future in quarter - blue */
+    .week.future-out { background: #161b22; border: 1px solid #21262d; } /* Future beyond quarter */
+    .week.partial { border: 2px dashed #58a6ff; }
+    .week.current { box-shadow: 0 0 0 2px #58a6ff; }
+    
+    /* Tooltip */
+    .tooltip {
+      display: none;
+      position: fixed;
+      background: #1f2937;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem;
+      max-width: 320px;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    
+    .tooltip.visible {
+      display: block;
+    }
+    
+    .tooltip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #30363d;
+    }
+    
+    .tooltip-date {
+      font-weight: 600;
+      color: #f0f6fc;
+    }
+    
+    .tooltip-score {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    
+    .tooltip-score.score-5 { background: #39d353; color: #000; }
+    .tooltip-score.score-4 { background: #26a641; color: #fff; }
+    .tooltip-score.score-3 { background: #006d32; color: #fff; }
+    .tooltip-score.score-2 { background: #f97316; color: #000; }
+    .tooltip-score.score-1 { background: #da3633; color: #fff; }
+    .tooltip-score.score-null { background: #30363d; color: #8b949e; }
+    
+    .tooltip-summary {
+      color: #c9d1d9;
+    }
+    
+    .tooltip-tags {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+    
+    .tooltip-tag {
+      font-size: 0.65rem;
+      background: #30363d;
+      color: #8b949e;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+    }
+    
+    .tooltip-meta {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: #8b949e;
+    }
+    
+    /* Stats */
+    .stats {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+    
+    .stat {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-top: 0.25rem;
+    }
+    
+    @media (max-width: 600px) {
+      body { padding: 1rem; }
+      .countdown { flex-direction: column; }
+      .countdown-value { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Life in Weeks</h1>
+    <p class="subtitle">Tracking since Nov 19, 2025 • Scored by Echo</p>
+    
+    <div class="countdown">
+      <div class="countdown-section">
+        <div class="countdown-label">Days left in Q2</div>
+        <div class="countdown-value" id="days-left">—</div>
+      </div>
+      <div class="countdown-section">
+        <div class="countdown-label">Weeks left</div>
+        <div class="countdown-value" id="weeks-left">—</div>
+      </div>
+      <div class="countdown-section">
+        <div class="countdown-end">Q2 ends: <strong>May 31, 2026</strong></div>
+      </div>
+    </div>
+    
+    <div class="legend">
+      <div class="legend-item"><div class="legend-box" style="background:#39d353"></div> Peak (5)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#26a641"></div> Solid (4)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#006d32"></div> Mixed (3)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f97316"></div> Rough (2)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#da3633"></div> Hard (1)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#21262d;border:1px solid #30363d"></div> No data</div>
+      <div class="legend-item"><div class="legend-box" style="background:#1d4ed8;opacity:0.6"></div> Future (Q2)</div>
+    </div>
+    
+    <div class="weeks-container" id="weeks-container"></div>
+    
+    <div class="stats" id="stats"></div>
+  </div>
+  
+  <div class="tooltip" id="tooltip"></div>
+  
+  <script>
+    const DATA_URL = 'life-in-weeks.json';
+    
+    async function init() {
+      const response = await fetch(DATA_URL);
+      const data = await response.json();
+      
+      updateCountdown(data.meta.quarterEnd);
+      renderWeeks(data);
+      renderStats(data);
+      setupTooltip(data);
+    }
+    
+    function updateCountdown(quarterEnd) {
+      const now = new Date();
+      const end = new Date(quarterEnd + 'T23:59:59');
+      const diffMs = end - now;
+      const daysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+      const weeksLeft = Math.max(0, Math.ceil(daysLeft / 7));
+      
+      document.getElementById('days-left').textContent = daysLeft;
+      document.getElementById('weeks-left').textContent = weeksLeft;
+    }
+    
+    function renderWeeks(data) {
+      const container = document.getElementById('weeks-container');
+      const startDate = new Date(data.meta.startDate);
+      const today = new Date();
+      const quarterEnd = new Date(data.meta.quarterEnd);
+      
+      // Build week lookup
+      const weekLookup = {};
+      data.weeks.forEach(w => {
+        weekLookup[w.weekStart] = w;
+      });
+      
+      // Generate weeks from start to end of quarter + some buffer
+      const weeks = [];
+      let current = new Date(startDate);
+      // Align to Monday if not already
+      const dayOfWeek = current.getDay();
+      if (dayOfWeek !== 1 && dayOfWeek !== 0) {
+        // First week is partial, keep as is
+      }
+      
+      // Find end date (end of quarter + a few weeks)
+      const endDate = new Date(quarterEnd);
+      endDate.setDate(endDate.getDate() + 60); // Show ~2 months beyond quarter
+      
+      while (current <= endDate) {
+        const weekStart = current.toISOString().split('T')[0];
+        const weekEnd = new Date(current);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        
+        const weekData = weekLookup[weekStart];
+        const isPast = weekEnd < today;
+        const isCurrent = current <= today && today <= weekEnd;
+        const isFutureInQuarter = current > today && current <= quarterEnd;
+        const isFutureBeyond = current > quarterEnd;
+        
+        weeks.push({
+          start: weekStart,
+          end: weekEnd.toISOString().split('T')[0],
+          year: current.getFullYear(),
+          weekNum: getISOWeek(current),
+          data: weekData,
+          isPast,
+          isCurrent,
+          isFutureInQuarter,
+          isFutureBeyond
+        });
+        
+        current.setDate(current.getDate() + 7);
+      }
+      
+      // Group by year
+      const byYear = {};
+      weeks.forEach(w => {
+        if (!byYear[w.year]) byYear[w.year] = [];
+        byYear[w.year].push(w);
+      });
+      
+      // Render
+      Object.keys(byYear).sort().forEach(year => {
+        const yearRow = document.createElement('div');
+        yearRow.className = 'year-row';
+        
+        const label = document.createElement('div');
+        label.className = 'year-label';
+        label.textContent = year;
+        yearRow.appendChild(label);
+        
+        const weeksRow = document.createElement('div');
+        weeksRow.className = 'weeks-row';
+        
+        byYear[year].forEach(week => {
+          const el = document.createElement('div');
+          el.className = 'week';
+          el.dataset.start = week.start;
+          el.dataset.end = week.end;
+          
+          if (week.isCurrent) el.classList.add('current');
+          if (week.data?.partial) el.classList.add('partial');
+          
+          if (week.isFutureBeyond) {
+            el.classList.add('future-out');
+          } else if (week.isFutureInQuarter) {
+            el.classList.add('future');
+          } else if (week.data) {
+            el.classList.add('score-' + week.data.score);
+          } else {
+            el.classList.add('score-null');
+          }
+          
+          weeksRow.appendChild(el);
+        });
+        
+        yearRow.appendChild(weeksRow);
+        container.appendChild(yearRow);
+      });
+    }
+    
+    function getISOWeek(date) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
+    
+    function renderStats(data) {
+      const stats = document.getElementById('stats');
+      const weeks = data.weeks;
+      
+      const scored = weeks.filter(w => w.score !== null);
+      const avgScore = scored.length ? (scored.reduce((a, w) => a + w.score, 0) / scored.length).toFixed(1) : '—';
+      const totalDailies = weeks.reduce((a, w) => a + (w.dailyCount || 0), 0);
+      const weeksTracked = weeks.length;
+      const peak = scored.filter(w => w.score === 5).length;
+      const solid = scored.filter(w => w.score === 4).length;
+      
+      const statData = [
+        { value: avgScore, label: 'Avg Score' },
+        { value: weeksTracked, label: 'Weeks Tracked' },
+        { value: totalDailies, label: 'Dailies Logged' },
+        { value: solid, label: 'Solid Weeks (4)' },
+        { value: peak, label: 'Peak Weeks (5)' }
+      ];
+      
+      statData.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'stat';
+        el.innerHTML = `<div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>`;
+        stats.appendChild(el);
+      });
+    }
+    
+    function setupTooltip(data) {
+      const tooltip = document.getElementById('tooltip');
+      const weekLookup = {};
+      data.weeks.forEach(w => { weekLookup[w.weekStart] = w; });
+      
+      document.querySelectorAll('.week').forEach(el => {
+        el.addEventListener('mouseenter', (e) => {
+          const start = el.dataset.start;
+          const end = el.dataset.end;
+          const weekData = weekLookup[start];
+          
+          const scoreLabels = { 5: 'Peak', 4: 'Solid', 3: 'Mixed', 2: 'Rough', 1: 'Hard', null: 'No data' };
+          const score = weekData?.score ?? null;
+          const scoreLabel = scoreLabels[score];
+          
+          let html = `
+            <div class="tooltip-header">
+              <span class="tooltip-date">${formatDate(start)} → ${formatDate(end)}</span>
+              <span class="tooltip-score score-${score}">${scoreLabel}${score ? ' (' + score + ')' : ''}</span>
+            </div>
+          `;
+          
+          if (weekData) {
+            html += `<div class="tooltip-summary">${weekData.summary}</div>`;
+            if (weekData.tags?.length) {
+              html += `<div class="tooltip-tags">${weekData.tags.map(t => `<span class="tooltip-tag">${t}</span>`).join('')}</div>`;
+            }
+            html += `<div class="tooltip-meta">${weekData.dailyCount} dailies logged${weekData.partial ? ' • partial week' : ''}</div>`;
+          } else if (new Date(start) > new Date()) {
+            html += `<div class="tooltip-summary" style="color:#8b949e">Future week</div>`;
+          } else {
+            html += `<div class="tooltip-summary" style="color:#8b949e">No data captured for this week</div>`;
+          }
+          
+          tooltip.innerHTML = html;
+          tooltip.classList.add('visible');
+          positionTooltip(e);
+        });
+        
+        el.addEventListener('mousemove', positionTooltip);
+        el.addEventListener('mouseleave', () => {
+          tooltip.classList.remove('visible');
+        });
+      });
+    }
+    
+    function positionTooltip(e) {
+      const tooltip = document.getElementById('tooltip');
+      const padding = 12;
+      let x = e.clientX + padding;
+      let y = e.clientY + padding;
+      
+      const rect = tooltip.getBoundingClientRect();
+      if (x + rect.width > window.innerWidth - padding) {
+        x = e.clientX - rect.width - padding;
+      }
+      if (y + rect.height > window.innerHeight - padding) {
+        y = e.clientY - rect.height - padding;
+      }
+      
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+    }
+    
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    
+    init();
+  </script>
+</body>
+</html>

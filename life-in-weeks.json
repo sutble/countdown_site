@@ -1,0 +1,148 @@
+{
+  "meta": {
+    "startDate": "2025-11-19",
+    "birthDate": "1997-05-14",
+    "quarterEnd": "2026-05-31",
+    "lastUpdated": "2026-02-15",
+    "scoringRubric": {
+      "5": "Peak - practices consistent, high output, high energy, notable wins",
+      "4": "Solid - more hits than misses, making progress, generally positive",
+      "3": "Mixed - some wins some losses, nothing remarkable either way",
+      "2": "Rough - struggled with distractions/food/energy, low output, more misses",
+      "1": "Hard - off track, major struggles, survival mode"
+    }
+  },
+  "weeks": [
+    {
+      "weekStart": "2025-11-19",
+      "weekEnd": "2025-11-23",
+      "weekNum": 47,
+      "year": 2025,
+      "partial": true,
+      "score": 3,
+      "summary": "First week of dailies. Sadhanapada retreat context. High energy but struggling with wake times, 2nd Surya Kriya misses, and dinner overeating cascade. Built the scoring system. Key insight: guilt as signal to improve wisdom.",
+      "dailyCount": 5,
+      "tags": ["sadhanapada", "system-building", "overeating-pattern"]
+    },
+    {
+      "weekStart": "2025-11-24",
+      "weekEnd": "2025-11-30",
+      "weekNum": 48,
+      "year": 2025,
+      "score": 4,
+      "summary": "Breakthrough week. First Strong Day (64 pts). Found the snack lever to prevent dinner overeating. Sadhana quality hitting 90%+. Strategic nap discovery. Desire mechanism observed (birthday chocolate). Food system improving. Scored 64-69 range consistently.",
+      "dailyCount": 7,
+      "tags": ["breakthrough", "snack-lever", "desire-observation", "strong-days"]
+    },
+    {
+      "weekStart": "2025-12-01",
+      "weekEnd": "2025-12-07",
+      "weekNum": 49,
+      "year": 2025,
+      "score": 3,
+      "summary": "Sparse data week. One daily captured (Dec 3). All Tier 1 sadhana complete. Worked on volunteering project. Recovered from overeating. Key insight: 1 banana is the line between pleasant and overeating.",
+      "dailyCount": 1,
+      "tags": ["sparse-data", "recovery"]
+    },
+    {
+      "weekStart": "2025-12-08",
+      "weekEnd": "2025-12-14",
+      "weekNum": 50,
+      "year": 2025,
+      "score": 3,
+      "summary": "Mixed week. 5 dailies captured. Sadhana continuing at retreat. Work on volunteering project ongoing. Standard retreat operations.",
+      "dailyCount": 5,
+      "tags": ["sadhanapada", "volunteering-project"]
+    },
+    {
+      "weekStart": "2025-12-15",
+      "weekEnd": "2025-12-21",
+      "weekNum": 51,
+      "year": 2025,
+      "score": null,
+      "summary": "No data captured this week.",
+      "dailyCount": 0,
+      "tags": ["no-data"]
+    },
+    {
+      "weekStart": "2025-12-22",
+      "weekEnd": "2025-12-28",
+      "weekNum": 52,
+      "year": 2025,
+      "score": 3,
+      "summary": "Sparse data. One daily (Dec 27). Sadhanapada closing out. Transition period.",
+      "dailyCount": 1,
+      "tags": ["sparse-data", "transition"]
+    },
+    {
+      "weekStart": "2025-12-29",
+      "weekEnd": "2026-01-04",
+      "weekNum": 1,
+      "year": 2026,
+      "score": null,
+      "summary": "No data captured. Post-retreat transition / holidays.",
+      "dailyCount": 0,
+      "tags": ["no-data", "transition"]
+    },
+    {
+      "weekStart": "2026-01-05",
+      "weekEnd": "2026-01-11",
+      "weekNum": 2,
+      "year": 2026,
+      "score": null,
+      "summary": "No data captured.",
+      "dailyCount": 0,
+      "tags": ["no-data"]
+    },
+    {
+      "weekStart": "2026-01-12",
+      "weekEnd": "2026-01-18",
+      "weekNum": 3,
+      "year": 2026,
+      "score": null,
+      "summary": "No data captured.",
+      "dailyCount": 0,
+      "tags": ["no-data"]
+    },
+    {
+      "weekStart": "2026-01-19",
+      "weekEnd": "2026-01-25",
+      "weekNum": 4,
+      "year": 2026,
+      "score": null,
+      "summary": "No data captured.",
+      "dailyCount": 0,
+      "tags": ["no-data"]
+    },
+    {
+      "weekStart": "2026-01-26",
+      "weekEnd": "2026-02-01",
+      "weekNum": 5,
+      "year": 2026,
+      "score": null,
+      "summary": "No data captured.",
+      "dailyCount": 0,
+      "tags": ["no-data"]
+    },
+    {
+      "weekStart": "2026-02-02",
+      "weekEnd": "2026-02-08",
+      "weekNum": 6,
+      "year": 2026,
+      "score": 3,
+      "summary": "Travel week with parents. Hotel life = no proper container. High work output (Hotel Intelligence 3 modules done, 771-file knowledge base migration). No formal practices (room constraint). Overeating returned. Decided to go to Bangalore. Glass Villa stay in Goa. CEO meeting went well — startup feels concrete. Mid-March deadline set.",
+      "dailyCount": 6,
+      "tags": ["travel", "with-parents", "hotel-intelligence", "knowledge-base-migration", "goa", "no-container"]
+    },
+    {
+      "weekStart": "2026-02-09",
+      "weekEnd": "2026-02-15",
+      "weekNum": 7,
+      "year": 2026,
+      "score": 3,
+      "summary": "Bangalore arrival week. Settling in. Building container: exploring neighborhoods, finding gyms/cafes. Location tracking experiments. Planning life in weeks visualization. Q2 plan taking shape.",
+      "dailyCount": 5,
+      "tags": ["bangalore", "container-building", "q2-planning"]
+    }
+  ]
+}
